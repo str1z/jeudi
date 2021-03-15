@@ -83,25 +83,27 @@ export default class TouchControls {
       this.dispatchKeyUp(" ");
     }
 
-    if (this.position.x - this.originPosition.x < -this.size) {
+    const th = this.size / 2;
+
+    if (this.position.x - this.originPosition.x < -th) {
       this.dispatchKeyDown("ArrowLeft");
     } else {
       this.dispatchKeyUp("ArrowLeft");
     }
 
-    if (this.position.x - this.originPosition.x > this.size) {
+    if (this.position.x - this.originPosition.x > th) {
       this.dispatchKeyDown("ArrowRight");
     } else {
       this.dispatchKeyUp("ArrowRight");
     }
 
-    if (this.position.y - this.originPosition.y < -this.size) {
+    if (this.position.y - this.originPosition.y < -th) {
       this.dispatchKeyDown("ArrowUp");
     } else {
       this.dispatchKeyUp("ArrowUp");
     }
 
-    if (this.position.y - this.originPosition.y > this.size) {
+    if (this.position.y - this.originPosition.y > th) {
       this.dispatchKeyDown("ArrowDown");
     } else {
       this.dispatchKeyUp("ArrowDown");
