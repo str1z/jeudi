@@ -50,13 +50,16 @@ export default class DungeonScene extends Phaser.Scene {
 
   createLights() {
     const { ambiantLight } = this.game.dungeonSceneData;
-    this.lights.enable().setAmbientColor(floatToColor(ambiantLight));
-    this.spotlight = this.lights.addLight(0, 0, 200, floatToColor(1 - ambiantLight), 1);
-    this.floorTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
-    this.wallTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
+    if (ambiantLight !== 1) {
+      this.lights.enable().setAmbientColor(floatToColor(ambiantLight));
+      this.spotlight = this.lights.addLight(0, 0, 200, floatToColor(1 - ambiantLight), 1);
+      this.floorTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
+      this.wallTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
+    }
   }
 
   createDungeon() {
+    // creating dungeon map blueprint
     this.dungeon = new DungeonMap({
       width: this.game.dungeonSceneData.dungeonSize,
       height: this.game.dungeonSceneData.dungeonSize,
@@ -68,17 +71,24 @@ export default class DungeonScene extends Phaser.Scene {
       enemiesPerRoom: this.game.dungeonSceneData.enemiesPerRoom,
     });
 
+    // creating the tiles
     this.floorTilemap = new FloorTilemap(this, this.dungeon.floorMap.data);
     this.wallTilemap = new WallTilemap(this, this.dungeon.wallMap.data);
-    this.entities = this.add.group();
 
+    // applying lighting effets
+    this.createLights();
+
+    // entities
+    this.entities = this.add.group();
     new Door(this, 32, 8);
     this.player = new Player(this, 32, 32, "knight_m");
     this.princess = new Princess(this, this.dungeon.princess.x * 16, this.dungeon.princess.y * 16);
 
+    // batch entities
     for (let e of this.dungeon.enemies) Enemy.createByName(this, e.x * 16, e.y * 16, e.name);
     for (let e of this.dungeon.chests) new Chest(this, e.x * 16, e.y * 16);
 
+    // add collisions
     this.physics.add.collider(this.entities, this.wallTilemap);
     this.physics.add.collider(this.entities, this.entities);
     this.physics.world.setBounds(0, 0, this.dungeon.width * 16, this.dungeon.height * 16);
@@ -108,7 +118,6 @@ export default class DungeonScene extends Phaser.Scene {
     this.createDungeon();
     this.createGoreParticle();
     this.createMusic();
-    this.createLights();
 
     this.startTime = Date.now();
   }

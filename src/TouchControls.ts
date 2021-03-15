@@ -18,7 +18,7 @@ const baseStyles = {
   position: "fixed",
   display: "none",
   border: "1px solid #333",
-  background: "rgba(50,50,50,0.2)",
+  background: "rgba(50,50,50,0.5)",
 };
 
 const allKeyDicts = Object.keys(keyToKeyCodes).map((key) => ({ key, keyCode: keyToKeyCodes[key] }));
@@ -28,8 +28,10 @@ export default class TouchControls {
   joystick: HTMLElement;
   size: number;
   originSize: number;
-  didMove: boolean;
-  isActive: boolean;
+
+  isJoystickActive: boolean;
+  didJoystickMove: boolean;
+  isSecondButtonActive: boolean;
 
   originPosition: Phaser.Math.Vector2;
   position: Phaser.Math.Vector2;
@@ -67,42 +69,25 @@ export default class TouchControls {
     window.setInterval(this.tick, 200);
   }
 
-  changeColor(color: string) {
-    this.joystickOrigin.style.borderColor = color;
-  }
-
   tick = () => {
-    if (!this.isActive) return;
+    if (!this.isJoystickActive) return;
 
-    const distance = this.position.distance(this.originPosition);
-    if (distance > this.originSize) {
-      this.changeColor("lime");
-      this.dispatchKeyDown(" ");
-    } else {
-      this.changeColor("#333");
-      this.dispatchKeyUp(" ");
-    }
-
-    const th = this.size / 2;
-
+    const th = this.size;
     if (this.position.x - this.originPosition.x < -th) {
       this.dispatchKeyDown("ArrowLeft");
     } else {
       this.dispatchKeyUp("ArrowLeft");
     }
-
     if (this.position.x - this.originPosition.x > th) {
       this.dispatchKeyDown("ArrowRight");
     } else {
       this.dispatchKeyUp("ArrowRight");
     }
-
     if (this.position.y - this.originPosition.y < -th) {
       this.dispatchKeyDown("ArrowUp");
     } else {
       this.dispatchKeyUp("ArrowUp");
     }
-
     if (this.position.y - this.originPosition.y > th) {
       this.dispatchKeyDown("ArrowDown");
     } else {
@@ -111,26 +96,28 @@ export default class TouchControls {
   };
 
   onTouchStart = (e: TouchEvent) => {
-    this.didMove = false;
-
-    this.joystickOrigin.style.display = "block";
-    const { clientX, clientY } = e.touches[0];
-
-    this.joystickOrigin.style.left = clientX - this.size + "px";
-    this.joystickOrigin.style.top = clientY - this.size + "px";
-
-    this.originPosition = new Phaser.Math.Vector2(clientX, clientY);
-    this.position = new Phaser.Math.Vector2(clientX, clientY);
-
-    this.isActive = true;
+    // dont move the joystick if it is already active
+    if (this.isJoystickActive) {
+      this.isSecondButtonActive = true;
+      this.dispatchKeyDown(" ");
+    } else {
+      // you are now using the joystick
+      this.isJoystickActive = true;
+      this.didJoystickMove = false;
+      this.joystickOrigin.style.display = "block";
+      const { clientX, clientY } = e.touches[e.touches.length - 1];
+      this.joystickOrigin.style.left = clientX - this.size + "px";
+      this.joystickOrigin.style.top = clientY - this.size + "px";
+      this.originPosition = new Phaser.Math.Vector2(clientX, clientY);
+      this.position = new Phaser.Math.Vector2(clientX, clientY);
+    }
   };
 
   onTouchMove = (e: TouchEvent) => {
-    this.didMove = true;
+    // move the joystick
+    this.didJoystickMove = true;
     this.joystick.style.display = "block";
-
     const { clientX, clientY } = e.touches[0];
-
     const halfSize = this.size / 2;
     const x = Math.max(
       this.originPosition.x - this.size,
@@ -140,11 +127,24 @@ export default class TouchControls {
       this.originPosition.y - this.size,
       Math.min(this.originPosition.y + this.size, clientY)
     );
-
     this.joystick.style.left = x - halfSize + "px";
     this.joystick.style.top = y - halfSize + "px";
-
     this.position = new Phaser.Math.Vector2(clientX, clientY);
+  };
+
+  onTouchEnd = () => {
+    if (this.isSecondButtonActive) {
+      this.isSecondButtonActive = false;
+      this.dispatchKeyUp(" ");
+    } else {
+      if (!this.didJoystickMove) {
+        this.dispatchKeyDown(" ");
+      }
+      this.joystickOrigin.style.display = "none";
+      this.joystick.style.display = "none";
+      for (const dict of allKeyDicts) this.dispatchKeyEvent("keyup", dict);
+      this.isJoystickActive = false;
+    }
   };
 
   dispatchKeyEvent(type: string, dict: { keyCode: number; key: string }) {
@@ -158,16 +158,4 @@ export default class TouchControls {
   dispatchKeyDown(key: string) {
     this.dispatchKeyEvent("keydown", { key, keyCode: keyToKeyCodes[key] });
   }
-
-  onTouchEnd = (e: TouchEvent) => {
-    this.joystickOrigin.style.display = "none";
-    this.joystick.style.display = "none";
-    if (!this.didMove) {
-      this.dispatchKeyDown(" ");
-    }
-    this.joystickOrigin.style.borderColor = "white";
-
-    for (const dict of allKeyDicts) this.dispatchKeyEvent("keyup", dict);
-    this.isActive = false;
-  };
 }

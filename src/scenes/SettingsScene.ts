@@ -49,6 +49,7 @@ export default class SettingsScene extends Phaser.Scene {
     const uppers = [Infinity, 5, 1, 10, 128, 16, 1, 1, 1];
 
     this.input.keyboard.addListener("keydown", (e: KeyboardEvent) => {
+      if (this.inTransition) return;
       if (e.key == "ArrowUp") {
         settingsCursor = Math.max(0, settingsCursor - 1);
       } else if (e.key == "ArrowDown") {
@@ -63,7 +64,7 @@ export default class SettingsScene extends Phaser.Scene {
           uppers[settingsCursor],
           settings[settingsKeys[settingsCursor]] + incs[settingsCursor]
         );
-      } else if (e.key == " " && !this.inTransition) {
+      } else if (e.key == " ") {
         this.inTransition = true;
         const duration = 2000;
         const tween = this.tweens.add({

@@ -9,5 +9,7 @@ export default function playerController(obj: Player) {
   if (left.isDown) obj.moveLeft();
   if (right.isDown) obj.moveRight();
   if (space.isDown && obj.weaponRotation == 0) obj.weaponRotation = 0.1;
-  obj.scene.spotlight.setPosition(obj.x, obj.y);
+  if (obj.scene.spotlight) {
+    obj.scene.spotlight.setPosition(obj.x, obj.y);
+  }
 }
