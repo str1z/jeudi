@@ -17,6 +17,7 @@ import Character from "../objects/Character";
 import Princess from "../objects/Princess";
 import Door from "../objects/Door";
 import { JeudiGame } from "..";
+import Entity from "../objects/Entity";
 
 export default class DungeonScene extends Phaser.Scene {
   wallTilemap: Phaser.Physics.Arcade.StaticGroup;
@@ -32,6 +33,7 @@ export default class DungeonScene extends Phaser.Scene {
   startTime: number;
   isGameOver: boolean;
   dungeon: DungeonMap;
+  spotlight: Phaser.GameObjects.Light;
 
   constructor() {
     super({});
@@ -45,6 +47,15 @@ export default class DungeonScene extends Phaser.Scene {
       loop: true,
     });
   }
+
+  createLights() {
+    this.lights.enable().setAmbientColor(0x111111);
+    this.spotlight = this.lights.addLight(0, 0, 200, 0xffffff, 2);
+    this.entities.children.each((e: Entity) => e.setPipeline("Light2D"));
+    this.floorTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
+    this.wallTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
+  }
+
   createDungeon() {
     this.dungeon = new DungeonMap({
       width: this.game.dungeonSceneData.dungeonSize,
@@ -96,6 +107,7 @@ export default class DungeonScene extends Phaser.Scene {
     this.createDungeon();
     this.createGoreParticle();
     this.createMusic();
+    this.createLights();
 
     this.startTime = Date.now();
   }
