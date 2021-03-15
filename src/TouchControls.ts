@@ -64,7 +64,7 @@ export default class TouchControls {
     window.addEventListener("touchstart", this.onTouchStart);
     window.addEventListener("touchend", this.onTouchEnd);
     window.addEventListener("touchmove", this.onTouchMove);
-    window.setInterval(this.tick, 100);
+    window.setInterval(this.tick, 200);
   }
 
   changeColor(color: string) {
