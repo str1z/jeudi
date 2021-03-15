@@ -1,6 +1,8 @@
 # jeudi
  A game for my computer science class. I went a bit overboard. Made with Phaser 3 along with sweet Typescript.
 
+You can play the game [here with Surge](https://jeudi.surge.sh)
+
 ## Note
 
 - This project has no commercial purpose.
