@@ -28,7 +28,7 @@ window.onload = () => {
   });
   if (isMobile) {
     alert(
-      `Hi there! You seem to be platyng on a mobile device. Touch for space and drag for arrows. Keep the "ambiantLight" option on 1 for the best performance.  Have fun!`
+      `Hi there! You seem to be playing on a mobile device. Touch for space and drag for arrows. Keep the "ambiantLight" option on 1 for the best performance.  Have fun!`
     );
   }
 };
