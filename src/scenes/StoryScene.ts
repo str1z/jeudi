@@ -6,11 +6,13 @@ const storyText = `Once upon a time, some Thursday of some week of some year, a 
 
 export default class StoryScene extends Phaser.Scene {
   game: JeudiGame;
+  inTransition: boolean;
   constructor() {
     super({});
   }
 
   create({ music }) {
+    this.inTransition = false;
     this.add.bitmapText(200, 100, "atari", "Story", 16).setOrigin(0.5);
 
     this.add
@@ -24,7 +26,8 @@ export default class StoryScene extends Phaser.Scene {
     this.add.bitmapText(200, 280, "atari", "Hit space to continue!", 8).setOrigin(0.5);
 
     this.input.keyboard.addListener("keydown", (e: KeyboardEvent) => {
-      if (e.key == " ") {
+      if (e.key == " " && !this.inTransition) {
+        this.inTransition = true;
         this.scene.start("settings", { music });
       }
     });

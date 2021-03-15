@@ -82,23 +82,23 @@ export default class TouchControls {
   tick = () => {
     if (!this.isJoystickActive) return;
 
-    const th = this.size;
-    if (this.position.x - this.originPosition.x < -th) {
+    const threshold = this.size / 2;
+    if (this.position.x - this.originPosition.x < -threshold) {
       this.dispatchKeyDown("ArrowLeft");
     } else {
       this.dispatchKeyUp("ArrowLeft");
     }
-    if (this.position.x - this.originPosition.x > th) {
+    if (this.position.x - this.originPosition.x > threshold) {
       this.dispatchKeyDown("ArrowRight");
     } else {
       this.dispatchKeyUp("ArrowRight");
     }
-    if (this.position.y - this.originPosition.y < -th) {
+    if (this.position.y - this.originPosition.y < -threshold) {
       this.dispatchKeyDown("ArrowUp");
     } else {
       this.dispatchKeyUp("ArrowUp");
     }
-    if (this.position.y - this.originPosition.y > th) {
+    if (this.position.y - this.originPosition.y > threshold) {
       this.dispatchKeyDown("ArrowDown");
     } else {
       this.dispatchKeyUp("ArrowDown");
