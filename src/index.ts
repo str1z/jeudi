@@ -1,6 +1,10 @@
 import JeudiGame from "./JeudiGame";
 import TouchControls from "./TouchControls";
 
+export const isMobile = /Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+);
+
 window.onload = () => {
   new TouchControls();
   new JeudiGame({
@@ -22,4 +26,9 @@ window.onload = () => {
       },
     },
   });
+  if (isMobile) {
+    alert(
+      "Hi there! You seem to be plating on a mobile device... Touch for space and drag for arrow keys. Have fun! Keep ambiant light to 1 for the best performance."
+    );
+  }
 };

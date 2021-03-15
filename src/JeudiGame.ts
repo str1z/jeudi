@@ -5,6 +5,7 @@ import MainScene from "./scenes/MainScene";
 import StoryScene from "./scenes/StoryScene";
 import ScoreScene from "./scenes/ScoreScene";
 import BootScene from "./scenes/BootScene";
+import { isMobile } from ".";
 
 // declare type GameConfig = Phaser.Core.Config;
 declare type GameConfig = {};
@@ -38,7 +39,7 @@ export default class JeudiGame extends Phaser.Game {
       minRoomSize: 8,
       dropRate: 0.2,
       musicVolume: 1,
-      ambiantLight: 0,
+      ambiantLight: isMobile ? 1 : 0,
     };
     this.scoreSceneData = {
       message: "You what, how!?!",
