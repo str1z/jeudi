@@ -1,4 +1,5 @@
 import "phaser";
+import { isMobile } from "..";
 import { atlas } from "../data/dungeon.json";
 
 function createLoadingBar(label: string, progress: number, barLength: number) {
@@ -38,7 +39,7 @@ export default class BootScene extends Phaser.Scene {
     });
 
     this.load.on("complete", () => {
-      this.scene.start("main");
+      this.scene.start(isMobile ? "mobile" : "main");
     });
 
     this.load.path = "assets/";

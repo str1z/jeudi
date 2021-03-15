@@ -5,6 +5,7 @@ import MainScene from "./scenes/MainScene";
 import StoryScene from "./scenes/StoryScene";
 import ScoreScene from "./scenes/ScoreScene";
 import BootScene from "./scenes/BootScene";
+import MobileScene from "./scenes/MobileScene";
 import { isMobile } from ".";
 
 // declare type GameConfig = Phaser.Core.Config;
@@ -51,6 +52,7 @@ export default class JeudiGame extends Phaser.Game {
 
   addScenes() {
     this.scene.add("boot", new BootScene(), true);
+    this.scene.add("mobile", new MobileScene());
     this.scene.add("main", new MainScene());
     this.scene.add("story", new StoryScene());
     this.scene.add("settings", new SettingsScene());

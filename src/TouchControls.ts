@@ -66,6 +66,16 @@ export default class TouchControls {
     window.addEventListener("touchstart", this.onTouchStart);
     window.addEventListener("touchend", this.onTouchEnd);
     window.addEventListener("touchmove", this.onTouchMove);
+
+    function preventGesture(e: Event) {
+      e.preventDefault();
+      document.body.style.zoom = "0.999";
+    }
+
+    window.addEventListener("gesturestart", preventGesture);
+    window.addEventListener("gesturechange", preventGesture);
+    window.addEventListener("gestureend", preventGesture);
+
     window.setInterval(this.tick, 200);
   }
 
