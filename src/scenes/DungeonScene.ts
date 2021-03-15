@@ -1,9 +1,11 @@
 import "phaser";
 
-import { anims, atlas, keys } from "../data/dungeon.json";
 import { tilemapUpdateInterval } from "../config.json";
+import { anims, keys } from "../data/dungeon.json";
 
+import floatToColor from "../utils/floatToColor";
 import createAnims from "../utils/createAnims";
+
 import FloorTilemap from "../objects/FloorTilemap";
 import WallTilemap from "../objects/WallTilemap";
 import Tile from "../objects/Tile";
@@ -11,13 +13,11 @@ import Player from "../objects/Player";
 import Enemy from "../objects/Enemy";
 import PowerUp from "../objects/PowerUp";
 import Chest from "../objects/Chest";
-
 import DungeonMap from "../gen/DungeonMap";
 import Character from "../objects/Character";
 import Princess from "../objects/Princess";
 import Door from "../objects/Door";
-import { JeudiGame } from "..";
-import Entity from "../objects/Entity";
+import JeudiGame from "../JeudiGame";
 
 export default class DungeonScene extends Phaser.Scene {
   wallTilemap: Phaser.Physics.Arcade.StaticGroup;
@@ -49,9 +49,9 @@ export default class DungeonScene extends Phaser.Scene {
   }
 
   createLights() {
-    this.lights.enable().setAmbientColor(0x111111);
-    this.spotlight = this.lights.addLight(0, 0, 200, 0xffffff, 2);
-    this.entities.children.each((e: Entity) => e.setPipeline("Light2D"));
+    const { ambiantLight } = this.game.dungeonSceneData;
+    this.lights.enable().setAmbientColor(floatToColor(ambiantLight));
+    this.spotlight = this.lights.addLight(0, 0, 200, floatToColor(1 - ambiantLight), 1);
     this.floorTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
     this.wallTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
   }
@@ -83,6 +83,7 @@ export default class DungeonScene extends Phaser.Scene {
     this.physics.add.collider(this.entities, this.entities);
     this.physics.world.setBounds(0, 0, this.dungeon.width * 16, this.dungeon.height * 16);
   }
+
   createGoreParticle() {
     this.goreParticles = this.add.particles("dungeon");
     this.goreParticles.depth = 1e10;
@@ -127,9 +128,11 @@ export default class DungeonScene extends Phaser.Scene {
     this.wallTilemap.children.each((child: Tile) => child.updateVisible());
     this.entities.children.each((child: Character) => child.updateVisible && child.updateVisible());
   }
+
   update() {
     this.entities.children.each((child) => child.update());
   }
+
   spawnPowerUp(x: number, y: number, key: string, propName: string, propInc = 1) {
     this.entities.add(new PowerUp(this, x, y, key, propName, propInc));
   }

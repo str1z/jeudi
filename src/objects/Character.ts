@@ -74,6 +74,7 @@ export default class Character extends Entity {
 
   updateHealthbar() {
     this.healthbar.clear();
+    if (this.health == this.maxHealth) return;
     this.healthbar.fillStyle(0xaa0000);
     this.healthbar.fillRect(this.x - 12, this.y - 15, 25, 5);
     this.healthbar.fillStyle(0x00aa00);

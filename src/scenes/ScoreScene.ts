@@ -1,5 +1,5 @@
 import "phaser";
-import { JeudiGame } from "..";
+import JeudiGame from "../JeudiGame";
 
 export default class ScoreScene extends Phaser.Scene {
   game: JeudiGame;

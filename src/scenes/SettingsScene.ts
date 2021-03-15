@@ -1,5 +1,5 @@
 import "phaser";
-import { JeudiGame } from "..";
+import JeudiGame from "../JeudiGame";
 
 export default class SettingsScene extends Phaser.Scene {
   game: JeudiGame;
@@ -20,7 +20,7 @@ export default class SettingsScene extends Phaser.Scene {
     this.add
       .bitmapText(
         200,
-        250,
+        260,
         "atari",
         ["Arrows to move & space to attack", "", "Hit space to start!"],
         8
@@ -44,9 +44,9 @@ export default class SettingsScene extends Phaser.Scene {
 
     renderSettingsText();
 
-    const lowers = [0, 1, 0, 0.01, 32, 4, 0, 0];
-    const incs = [1, 1, 0.1, 0.1, 1, 1, 0.1, 0.1];
-    const uppers = [Infinity, 5, 1, 10, 128, 16, 1, 1];
+    const lowers = [0, 1, 0, 0.01, 32, 4, 0, 0, 0];
+    const incs = [1, 1, 0.1, 0.1, 1, 1, 0.1, 0.1, 0.1];
+    const uppers = [Infinity, 5, 1, 10, 128, 16, 1, 1, 1];
 
     this.input.keyboard.addListener("keydown", (e: KeyboardEvent) => {
       if (e.key == "ArrowUp") {

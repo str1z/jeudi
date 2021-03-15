@@ -1,5 +1,5 @@
 import "phaser";
-import { JeudiGame } from "..";
+import JeudiGame from "../JeudiGame";
 import { atlas, keys } from "../data/dungeon.json";
 
 const storyText = `Once upon a time, some Thursday of some week of some year, a certain fancy knight with a fancy sword and some shiny armour must save his beloved princess from the dangers of a bloody dungeon. Red potions give you health, blue for speed, yellow for range and green for strength. Coins make you richer!`;
