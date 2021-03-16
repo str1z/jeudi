@@ -123,9 +123,7 @@ export default class DungeonScene extends Phaser.Scene {
   }
 
   createMusic() {
-    // little easter egg
-    const isThursday = this.game.dungeonSceneData.dungeonSeed % 4 == 0;
-    this.music = this.sound.add(isThursday ? "metal_dungeon" : "chiptune_dungeon", {
+    this.music = this.sound.add("dungeon", {
       loop: true,
       volume: this.game.dungeonSceneData.musicVolume,
     });

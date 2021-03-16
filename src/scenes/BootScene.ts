@@ -47,8 +47,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.bitmapFont("atari", "fonts/atari_classic.png", "fonts/atari_classic.xml");
     this.load.atlas("dungeon", "spritesheets/dungeon.png", atlas);
     this.load.audio("main", "audio/chiptune_rising_of_the_shield_hero.mp3");
-    this.load.audio("chiptune_dungeon", "audio/chiptune_bad_apple.mp3");
-    this.load.audio("metal_dungeon", "audio/metal_bad_apple.mp3");
+    this.load.audio("dungeon", "audio/chiptune_bad_apple.mp3");
     this.load.audio("score", "audio/piano_elaina_ending.mp3");
   }
 }
