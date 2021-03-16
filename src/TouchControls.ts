@@ -76,10 +76,10 @@ export default class TouchControls {
     window.addEventListener("gesturechange", preventGesture);
     window.addEventListener("gestureend", preventGesture);
 
-    window.setInterval(this.tick, 200);
+    window.setInterval(this.emitKeys, 200);
   }
 
-  tick = () => {
+  emitKeys = () => {
     if (!this.isJoystickActive) return;
 
     const threshold = this.size / 2;
