@@ -18,10 +18,10 @@ export default class BootScene extends Phaser.Scene {
 
   renderLoading() {
     const fileUrls = Object.keys(this.fileProgresses);
-    const bars = fileUrls.map((url) => createLoadingBar(url, this.fileProgresses[url], 30));
+    const bars = fileUrls.map((url) => createLoadingBar(url, this.fileProgresses[url], 40));
     this.loading.setText([
       ...bars,
-      createLoadingBar("Total loading progress", this.totalProgress, 30),
+      createLoadingBar("Total loading progress", this.totalProgress, 40),
     ]);
   }
 

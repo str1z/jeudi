@@ -1,6 +1,6 @@
 import "phaser";
 import JeudiGame from "../JeudiGame";
-
+import {width, height} from "../config.json"
 export default class ScoreScene extends Phaser.Scene {
   game: JeudiGame;
   inTransition: boolean;
@@ -11,13 +11,13 @@ export default class ScoreScene extends Phaser.Scene {
   create() {
     this.inTransition = false;
     const { message, coins, msElapsed } = this.game.scoreSceneData;
-    this.add.bitmapText(200, 140, "atari", "Game Over!", 8).setOrigin(0.5);
-    this.add.bitmapText(200, 180, "atari", message, 16).setOrigin(0.5);
+    this.add.bitmapText(width / 2, height * 0.45, "atari", "Game Over!", 8).setOrigin(0.5);
+    this.add.bitmapText(width / 2, height * 0.5, "atari", message, 16).setOrigin(0.5);
 
     this.add
       .bitmapText(
-        200,
-        200,
+        width / 2,
+        height * 0.55,
         "atari",
         [
           `in ${Math.round(msElapsed / 1000)} seconds...`,

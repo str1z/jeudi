@@ -52,7 +52,7 @@ export default class DungeonScene extends Phaser.Scene {
     const { ambiantLight } = this.game.dungeonSceneData;
     if (ambiantLight !== 1) {
       this.lights.enable().setAmbientColor(floatToColor(ambiantLight));
-      this.spotlight = this.lights.addLight(0, 0, 200, floatToColor(1 - ambiantLight), 1);
+      this.spotlight = this.lights.addLight(0, 0, 256, floatToColor(1 - ambiantLight), 1);
       this.floorTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
       this.wallTilemap.children.each((t: Tile) => t.setPipeline("Light2D"));
     }
