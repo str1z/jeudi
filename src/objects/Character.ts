@@ -54,6 +54,7 @@ export default class Character extends Entity {
     if (ghost) {
       this.body.checkCollision.none = true;
     }
+
   }
 
   get health() {
@@ -118,11 +119,11 @@ export default class Character extends Entity {
   }
 
   update() {
-    if (!this.visible || !this.scene || this.scene.isGameOver) return;
+
+    if (!this.scene || this.scene.isGameOver) return;
     this.directionX = 0;
     this.directionY = 0;
     this.controller(this);
-    this.depth = this.y + this.depthOff;
     this.updateHealthbar();
     this.updateAnimation();
     if (this.health <= 0) {

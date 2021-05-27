@@ -1,5 +1,5 @@
 {
-  "tilemapUpdateInterval": 200,
   "width": 512,
-  "height": 512
+  "height": 512,
+  "tileSize": 16
 }

@@ -1,7 +1,7 @@
 import "phaser";
 
 export default class Tilemap extends Phaser.GameObjects.RenderTexture {
-	constructor(scene: Phaser.Scene, layout: string[][], size = 16, offX = 0, offY = -8) {
+	constructor(scene: Phaser.Scene, layout: string[][], size: number, offX: number, offY: number) {
 		const height = layout.length
 		const width = layout[0].length
 		super(scene, offX, offY, height * size, width * size);

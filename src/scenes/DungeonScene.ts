@@ -1,6 +1,6 @@
 import "phaser";
 
-import { tilemapUpdateInterval } from "../config.json";
+import { tileSize } from "../config.json";
 import { anims, keys } from "../data/dungeon.json";
 
 import floatToColor from "../utils/floatToColor";
@@ -18,6 +18,8 @@ import Door from "../objects/Door";
 import JeudiGame from "../JeudiGame";
 
 export default class DungeonScene extends Phaser.Scene {
+	wallCollider: Phaser.Physics.Arcade.Collider
+	entityCollider: Phaser.Physics.Arcade.Collider
 	wallTilemap: Phaser.GameObjects.RenderTexture;
 	floorTilemap: Phaser.GameObjects.RenderTexture;
 	entities: Phaser.GameObjects.Group;
@@ -37,14 +39,7 @@ export default class DungeonScene extends Phaser.Scene {
 		super({});
 	}
 
-	createTimers() {
-		this.time.addEvent({
-			callback: this.updateVisible,
-			callbackScope: this,
-			delay: tilemapUpdateInterval,
-			loop: true,
-		});
-	}
+
 
 	createLights() {
 		const { ambiantLight } = this.game.dungeonSceneData;
@@ -70,44 +65,45 @@ export default class DungeonScene extends Phaser.Scene {
 		});
 
 		// creating the tiles
-		this.floorTilemap = new Tilemap(this, this.dungeon.floorMap.data);
-		this.wallTilemap = new Tilemap(this, this.dungeon.wallMap.data);
+		this.floorTilemap = new Tilemap(this, this.dungeon.floorMap.data, tileSize, 0, -8);
+		this.wallTilemap = new Tilemap(this, this.dungeon.wallMap.data, tileSize, 0, -8);
 
 		// applying lighting effets
 		this.createLights();
 
 		// entities
 		this.entities = this.add.group();
-		new Door(this, 32, 8);
-		this.player = new Player(this, 32, 32, "knight_m");
+		new Door(this, tileSize * 2, 8);
+		this.player = new Player(this, tileSize * 2, tileSize * 2, "knight_m");
 		this.princess = new Princess(
 			this,
-			this.dungeon.princess.x * 16,
-			this.dungeon.princess.y * 16
+			this.dungeon.princess.x * tileSize,
+			this.dungeon.princess.y * tileSize
 		);
 
 		// batch entities
-		for (let e of this.dungeon.enemies) Enemy.createByName(this, e.x * 16, e.y * 16, e.name);
-		for (let e of this.dungeon.chests) new Chest(this, e.x * 16, e.y * 16);
+		for (let e of this.dungeon.enemies) Enemy.createByName(this, e.x * tileSize, e.y * tileSize, e.name);
+		for (let e of this.dungeon.chests) new Chest(this, e.x * tileSize, e.y * tileSize);
+
+		console.log(this.entities)
 
 		// wall bounds
 		const wallBounds = this.dungeon.wallBounds.map(([x, y, width, height]) => {
-			console.log(x, y, width, height);
 			const entity = this.physics.add.staticImage(
-				x * 16 + width * 8,
-				y * 16 + height * 8,
+				x * tileSize + width * tileSize / 2,
+				y * tileSize + height * tileSize / 2,
 				""
 			);
 			entity.setVisible(false);
-			entity.body.setSize(width * 16, height * 16 + 16);
+			entity.body.setSize(width * tileSize, height * tileSize + tileSize);
 			this.physics.world.add(entity.body);
 			return entity;
 		});
 
 		// add collisions
-		this.physics.add.collider(this.entities, wallBounds);
-		this.physics.add.collider(this.entities, this.entities);
-		this.physics.world.setBounds(0, 0, this.dungeon.width * 16, this.dungeon.height * 16);
+		this.wallCollider = this.physics.add.collider(this.entities, wallBounds);
+		this.entityCollider = this.physics.add.collider(this.entities, this.entities);
+		this.physics.world.setBounds(0, 0, this.dungeon.width * tileSize, this.dungeon.height * tileSize);
 	}
 
 	createGoreParticle() {
@@ -130,7 +126,6 @@ export default class DungeonScene extends Phaser.Scene {
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
-		this.createTimers();
 		this.createDungeon();
 		this.createGoreParticle();
 		this.createMusic();
@@ -146,13 +141,6 @@ export default class DungeonScene extends Phaser.Scene {
 		this.music.play();
 	}
 
-	updateVisible() {
-		// this.floorTilemap.children.each((child: Tile) => child.updateVisible());
-		// this.wallTilemap.children.each((child: Tile) => child.updateVisible());
-		this.entities.children.each(
-			(child: Character) => child.updateVisible && child.updateVisible()
-		);
-	}
 
 	update() {
 		this.entities.children.each((child) => child.update());

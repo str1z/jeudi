@@ -8,7 +8,6 @@ export default class Door extends Entity {
   constructor(scene: DungeonScene, x: number, y: number) {
     super(scene, x, y, "");
     this.scene.add.existing(this);
-    this.depth = this.y + 32;
   }
 
   update() {

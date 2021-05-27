@@ -15,13 +15,4 @@ export default class Entity extends Phaser.GameObjects.Sprite {
     }
     scene.entities.add(this, true);
   }
-  updateVisible() {
-    const inView = Phaser.Geom.Rectangle.Overlaps(
-      this.scene.cameras.main.worldView,
-      this.getBounds()
-    );
-    if (inView != this.visible) {
-      this.visible = inView;
-    }
-  }
 }
