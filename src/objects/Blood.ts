@@ -7,7 +7,7 @@ import Entity from "./Entity";
 export default class Blood extends Entity {
   constructor(scene: DungeonScene, x: number, y: number) {
     super(scene, x, y, "");
-    this.depth = this.y;
     this.play(keys.blood);
+    this.depth = -1
   }
 }

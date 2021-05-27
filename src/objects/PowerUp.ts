@@ -23,6 +23,7 @@ export default class PowerUp extends Entity {
     this.depth = 1e4;
     this.propName = propName;
     this.propInc = propInc;
+    this.depth = -1
   }
   update() {
     let distance = Phaser.Math.Distance.BetweenPoints(this.scene.player, this);

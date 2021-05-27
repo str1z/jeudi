@@ -1,6 +1,7 @@
 import "phaser";
 import { isMobile } from "..";
-import { atlas } from "../data/dungeon.json";
+import { anims, atlas } from "../data/dungeon.json";
+import createAnims from "../utils/createAnims";
 
 function createLoadingBar(label: string, progress: number, barLength: number) {
   const text = ((progress * 100).toFixed(2) + "%").padEnd(7);
@@ -39,6 +40,7 @@ export default class BootScene extends Phaser.Scene {
     });
 
     this.load.on("complete", () => {
+      createAnims(this, "dungeon", anims);
       this.scene.start(isMobile ? "mobile" : "main");
     });
 

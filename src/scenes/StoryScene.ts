@@ -3,7 +3,7 @@ import JeudiGame from "../JeudiGame";
 import { atlas, keys } from "../data/dungeon.json";
 import { width, height } from "../config.json";
 
-const storyText = `Once upon a time, some Thursday of some week of some year, a certain fancy knight with a fancy sword and some shiny armour must save his beloved princess from the dangers of a bloody dungeon. Red potions give you health, blue for speed, yellow for range and green for strength. Coins make you richer!`;
+const storyText = `Once upon a time, some Thursday of some week of some year, some brave adventurer must save his/her beloved princess from the dangers of a bloody dungeon. Red potions give you health, blue for speed, yellow for range and green for strength. Coins make you richer!`;
 
 export default class StoryScene extends Phaser.Scene {
 	game: JeudiGame;
@@ -28,7 +28,7 @@ export default class StoryScene extends Phaser.Scene {
 			.setMaxWidth(300)
 			.setCenterAlign();
 
-		this.add.sprite(width / 2, height * 0.65, "dungeon", "elf_f_idle_anim0").setScale(2);
+		this.add.sprite(width / 2, height * 0.65, null).setScale(2).play("elf_f_run_anim");
 
 		this.add
 			.bitmapText(width / 2, height * 0.8, "atari", "Hit space to continue!", 8)

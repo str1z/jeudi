@@ -27,6 +27,8 @@ export default class JeudiGame extends Phaser.Game {
     dropRate: number;
     musicVolume: number;
     ambiantLight: number;
+    player: number;
+    weapon: number;
   };
 
   constructor(config: GameConfig) {
@@ -41,6 +43,8 @@ export default class JeudiGame extends Phaser.Game {
       dropRate: 0.2,
       musicVolume: 1,
       ambiantLight: isMobile ? 1 : 0,
+      player: 0,
+      weapon: 0
     };
     this.scoreSceneData = {
       message: "You what, how!?!",

@@ -1,25 +1,22 @@
 import "phaser";
-
 import { tileSize } from "../config.json";
-import { anims, keys } from "../data/dungeon.json";
-
-import floatToColor from "../utils/floatToColor";
-import createAnims from "../utils/createAnims";
-
-import Tilemap from "../objects/Tilemap";
-import Player from "../objects/Player";
-import Enemy from "../objects/Enemy";
-import PowerUp from "../objects/PowerUp";
-import Chest from "../objects/Chest";
+import { keys } from "../data/dungeon.json";
 import DungeonMap from "../gen/DungeonMap";
-import Character from "../objects/Character";
-import Princess from "../objects/Princess";
-import Door from "../objects/Door";
 import JeudiGame from "../JeudiGame";
+import Chest from "../objects/Chest";
+import Door from "../objects/Door";
+import Enemy from "../objects/Enemy";
+import Player from "../objects/Player";
+import PowerUp from "../objects/PowerUp";
+import Princess from "../objects/Princess";
+import Tilemap from "../objects/Tilemap";
+import floatToColor from "../utils/floatToColor";
+import getPlayerSpriteName from "../utils/getPlayerSpriteName";
+import getWeaponSpriteName from "../utils/getWeaponSpriteName";
 
 export default class DungeonScene extends Phaser.Scene {
-	wallCollider: Phaser.Physics.Arcade.Collider
-	entityCollider: Phaser.Physics.Arcade.Collider
+	wallCollider: Phaser.Physics.Arcade.Collider;
+	entityCollider: Phaser.Physics.Arcade.Collider;
 	wallTilemap: Phaser.GameObjects.RenderTexture;
 	floorTilemap: Phaser.GameObjects.RenderTexture;
 	entities: Phaser.GameObjects.Group;
@@ -38,8 +35,6 @@ export default class DungeonScene extends Phaser.Scene {
 	constructor() {
 		super({});
 	}
-
-
 
 	createLights() {
 		const { ambiantLight } = this.game.dungeonSceneData;
@@ -66,6 +61,7 @@ export default class DungeonScene extends Phaser.Scene {
 
 		// creating the tiles
 		this.floorTilemap = new Tilemap(this, this.dungeon.floorMap.data, tileSize, 0, -8);
+		this.floorTilemap.depth = -2;
 		this.wallTilemap = new Tilemap(this, this.dungeon.wallMap.data, tileSize, 0, -8);
 
 		// applying lighting effets
@@ -74,7 +70,9 @@ export default class DungeonScene extends Phaser.Scene {
 		// entities
 		this.entities = this.add.group();
 		new Door(this, tileSize * 2, 8);
-		this.player = new Player(this, tileSize * 2, tileSize * 2, "knight_m");
+		const playerSprite = getPlayerSpriteName(this.game.dungeonSceneData.player);
+		const weaponSprite = getWeaponSpriteName(this.game.dungeonSceneData.weapon)
+		this.player = new Player(this, tileSize * 2, tileSize * 2, playerSprite, weaponSprite);
 		this.princess = new Princess(
 			this,
 			this.dungeon.princess.x * tileSize,
@@ -82,16 +80,15 @@ export default class DungeonScene extends Phaser.Scene {
 		);
 
 		// batch entities
-		for (let e of this.dungeon.enemies) Enemy.createByName(this, e.x * tileSize, e.y * tileSize, e.name);
+		for (let e of this.dungeon.enemies)
+			Enemy.createByName(this, e.x * tileSize, e.y * tileSize, e.name);
 		for (let e of this.dungeon.chests) new Chest(this, e.x * tileSize, e.y * tileSize);
-
-		console.log(this.entities)
 
 		// wall bounds
 		const wallBounds = this.dungeon.wallBounds.map(([x, y, width, height]) => {
 			const entity = this.physics.add.staticImage(
-				x * tileSize + width * tileSize / 2,
-				y * tileSize + height * tileSize / 2,
+				x * tileSize + (width * tileSize) / 2,
+				y * tileSize + (height * tileSize) / 2,
 				""
 			);
 			entity.setVisible(false);
@@ -103,7 +100,12 @@ export default class DungeonScene extends Phaser.Scene {
 		// add collisions
 		this.wallCollider = this.physics.add.collider(this.entities, wallBounds);
 		this.entityCollider = this.physics.add.collider(this.entities, this.entities);
-		this.physics.world.setBounds(0, 0, this.dungeon.width * tileSize, this.dungeon.height * tileSize);
+		this.physics.world.setBounds(
+			0,
+			0,
+			this.dungeon.width * tileSize,
+			this.dungeon.height * tileSize
+		);
 	}
 
 	createGoreParticle() {
@@ -122,7 +124,6 @@ export default class DungeonScene extends Phaser.Scene {
 
 	create() {
 		this.isGameOver = false;
-		createAnims(this, "dungeon", anims);
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -140,7 +141,6 @@ export default class DungeonScene extends Phaser.Scene {
 		});
 		this.music.play();
 	}
-
 
 	update() {
 		this.entities.children.each((child) => child.update());
