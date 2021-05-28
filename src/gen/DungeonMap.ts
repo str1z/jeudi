@@ -161,7 +161,7 @@ export default class DungeonMap {
 			[0, this.height - 1, this.width, 1],
 			[this.width - 1, 0, 1, this.height]
 		);
-    for (const wallBound of this.wallBounds) this.wallMap.fillRect(...wallBound, keys.block)
+		for (const wallBound of this.wallBounds) this.wallMap.fillRect(...wallBound, keys.block);
 		this.princess = this.randomNodeXY(nodes[0]);
 	}
 

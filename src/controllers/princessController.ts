@@ -1,9 +1,8 @@
 import Enemy from "../objects/Enemy";
 import handleHealth from "./handleHealth";
 
-export default function princessController(obj: Enemy) {
+export default function princessController(obj: Enemy, distance: number) {
   if (!obj.custom.wantedVelocity) obj.custom.wantedVelocity = new Phaser.Math.Vector2(0, 0);
-  let distance = Phaser.Math.Distance.BetweenPoints(obj.scene.player, obj);
   let player = obj.scene.player;
   // follow the player
   if (distance < 100) {

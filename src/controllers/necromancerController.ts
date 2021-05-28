@@ -4,9 +4,8 @@ import handleHealth from "./handleHealth";
 
 const summons = ["imp", "goblin", "tiny_zombie"];
 
-export default function chaserController(obj: Enemy) {
+export default function chaserController(obj: Enemy, distance: number) {
   if (!obj.custom.wantedVelocity) obj.custom.wantedVelocity = new Phaser.Math.Vector2(0, 0);
-  let distance = Phaser.Math.Distance.BetweenPoints(obj.scene.player, obj);
   let player = obj.scene.player;
   // summon enemies
   if (distance < 100) {

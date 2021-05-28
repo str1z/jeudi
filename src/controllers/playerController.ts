@@ -1,6 +1,6 @@
 import Player from "../objects/Player";
 
-export default function playerController(obj: Player) {
+export default function playerController(obj: Player, distance: number) {
   obj.updateWeapon();
   obj.directionX = obj.directionY = 0;
   const { up, down, left, right, space, shift } = obj.scene.cursors;

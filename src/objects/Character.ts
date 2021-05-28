@@ -4,6 +4,7 @@ import DungeonScene from "../scenes/DungeonScene";
 import Entity from "./Entity";
 import Blood from "./Blood";
 
+type CharacterController = (t: Character, distance: number) => void
 export default class Character extends Entity {
   speed: number;
   healthbar: Phaser.GameObjects.Graphics;
@@ -16,7 +17,7 @@ export default class Character extends Entity {
   custom: any;
   animIdle: string;
   animRun: string;
-  controller: (t: Character) => void;
+  controller: CharacterController;
 
   constructor(
     scene: DungeonScene,
@@ -27,7 +28,7 @@ export default class Character extends Entity {
     offX: number,
     offY: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number = 10,
     maxHealth: number = 100,
     ghost = false
@@ -119,11 +120,11 @@ export default class Character extends Entity {
   }
 
   update() {
-
-    if (!this.scene || this.scene.isGameOver) return;
+    let distance = Phaser.Math.Distance.BetweenPoints(this.scene.player, this)
+    if (distance > 256 || !this.scene || this.scene.isGameOver) return;
     this.directionX = 0;
     this.directionY = 0;
-    this.controller(this);
+    this.controller(this, distance);
     this.updateHealthbar();
     this.updateAnimation();
     if (this.health <= 0) {
@@ -144,7 +145,7 @@ export default class Character extends Entity {
     x: number,
     y: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number,
     maxHealth: number
   ) {
@@ -156,7 +157,7 @@ export default class Character extends Entity {
     x: number,
     y: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number,
     maxHealth: number
   ) {
@@ -168,7 +169,7 @@ export default class Character extends Entity {
     x: number,
     y: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number,
     maxHealth: number
   ) {
@@ -180,7 +181,7 @@ export default class Character extends Entity {
     x: number,
     y: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number,
     maxHealth: number
   ) {
@@ -192,7 +193,7 @@ export default class Character extends Entity {
     x: number,
     y: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number,
     maxHealth: number
   ) {
@@ -204,7 +205,7 @@ export default class Character extends Entity {
     x: number,
     y: number,
     anim: string,
-    controller: (t: Character) => void,
+    controller: CharacterController,
     speed: number,
     maxHealth: number
   ) {
