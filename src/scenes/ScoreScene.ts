@@ -36,7 +36,7 @@ export default class ScoreScene extends Phaser.Scene {
 
     const music = this.sound.add("score", {
       loop: true,
-      volume: this.game.dungeonSceneData.musicVolume,
+      volume: this.game.settings.musicVolume,
     });
     music.play({ seek: 1.8 });
 
@@ -44,15 +44,8 @@ export default class ScoreScene extends Phaser.Scene {
       if (e.key == " " && !this.inTransition) {
         this.inTransition = true;
         const duration = 2000;
-        const tween = this.tweens.add({
-          targets: music,
-          volume: 0,
-          duration,
-        });
         this.cameras.main.fade(duration).once("camerafadeoutcomplete", () => {
-          tween.remove();
-          music.destroy();
-          this.scene.start("main");
+          this.scene.start("shop", {music});
         });
       }
     });

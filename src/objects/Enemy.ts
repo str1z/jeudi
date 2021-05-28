@@ -10,7 +10,7 @@ import shamanController from "../controllers/shamanController";
 
 export default class Enemy extends Character {
   static createByName(scene: DungeonScene, x: number, y: number, name: string) {
-    const diffMult = scene.game.dungeonSceneData.difficultyMultiplier;
+    const diffMult = scene.game.settings.difficultyMultiplier;
     switch (name) {
       // big
       case "big_demon":
@@ -60,7 +60,7 @@ export default class Enemy extends Character {
   }
 
   beforeDestroy() {
-    if (Math.random() < this.scene.game.dungeonSceneData.dropRate) {
+    if (Math.random() < this.scene.game.settings.dropRate) {
       this.scene.randomDrop(this.x, this.y + 10);
     }
   }

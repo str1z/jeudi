@@ -30,7 +30,7 @@ export default class SettingsScene extends Phaser.Scene {
 			.setCenterAlign()
 			.setOrigin(0.5, 0);
 
-		const settings = this.game.dungeonSceneData;
+		const settings = this.game.settings;
 
 		const playerSprite = this.add.sprite(width / 2, height * 0.7, null).setScale(2);
 		const weaponSprite = this.add.sprite(width / 2 + 20, height * 0.7, null).setScale(2);

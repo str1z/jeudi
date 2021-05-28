@@ -9,21 +9,22 @@ export default class Player extends Character {
 	weaponRotation: number;
 
 	speed: number;
-	coins: number;
 	damage: number;
 	range: number;
+	coins: number;
 
-	constructor(scene: DungeonScene, x: number, y: number, anim: string, weaponSprite: string) {
-		super(scene, x, y, 10, 10, 3, 20, anim, playerController, 20, 1000);
+	constructor(scene: DungeonScene, x: number, y: number, anim: string, weaponSprite: string, maxHealth: number, speed: number, damage: number, range: number) {
+		super(scene, x, y, 10, 10, 3, 20, anim, playerController, 20, maxHealth);
 
 		this.scene.cameras.main.startFollow(this);
 
 		this.createWeapon(weaponSprite);
 
-		this.speed = 100;
+		this.maxHealth = maxHealth
+		this.speed = speed;
+		this.damage = damage;
+		this.range = range;
 		this.coins = 0;
-		this.damage = 5;
-		this.range = 30;
 	}
 	createWeapon(anim: string) {
 		this.weapon = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "");

@@ -37,7 +37,7 @@ export default class DungeonScene extends Phaser.Scene {
 	}
 
 	createLights() {
-		const { ambiantLight } = this.game.dungeonSceneData;
+		const { ambiantLight } = this.game.settings;
 		if (ambiantLight !== 1) {
 			this.lights.enable().setAmbientColor(floatToColor(ambiantLight));
 			this.spotlight = this.lights.addLight(0, 0, 256, floatToColor(1 - ambiantLight), 1);
@@ -49,14 +49,14 @@ export default class DungeonScene extends Phaser.Scene {
 	createDungeon() {
 		// creating dungeon map blueprint
 		this.dungeon = new DungeonMap({
-			width: this.game.dungeonSceneData.dungeonSize,
-			height: this.game.dungeonSceneData.dungeonSize,
+			width: this.game.settings.dungeonSize,
+			height: this.game.settings.dungeonSize,
 			entranceSize: 4,
-			minRoomHeight: this.game.dungeonSceneData.minRoomSize,
-			minRoomWidth: this.game.dungeonSceneData.minRoomSize,
-			dungeonSeed: "" + this.game.dungeonSceneData.dungeonSeed,
-			chestSpawnRate: this.game.dungeonSceneData.chestSpawnRate,
-			enemiesPerRoom: this.game.dungeonSceneData.enemiesPerRoom,
+			minRoomHeight: this.game.settings.minRoomSize,
+			minRoomWidth: this.game.settings.minRoomSize,
+			dungeonSeed: "" + this.game.settings.dungeonSeed,
+			chestSpawnRate: this.game.settings.chestSpawnRate,
+			enemiesPerRoom: this.game.settings.enemiesPerRoom,
 		});
 
 		// creating the tiles
@@ -70,9 +70,10 @@ export default class DungeonScene extends Phaser.Scene {
 		// entities
 		this.entities = this.add.group();
 		new Door(this, tileSize * 2, 8);
-		const playerSprite = getPlayerSpriteName(this.game.dungeonSceneData.player);
-		const weaponSprite = getWeaponSpriteName(this.game.dungeonSceneData.weapon)
-		this.player = new Player(this, tileSize * 2, tileSize * 2, playerSprite, weaponSprite);
+		const playerSprite = getPlayerSpriteName(this.game.settings.player);
+		const weaponSprite = getWeaponSpriteName(this.game.settings.weapon)
+		const {maxHealth, speed, range, damage} = this.game.upgrades
+		this.player = new Player(this, tileSize * 2, tileSize * 2, playerSprite, weaponSprite, maxHealth, speed, damage, range);
 		this.princess = new Princess(
 			this,
 			this.dungeon.princess.x * tileSize,
@@ -137,7 +138,7 @@ export default class DungeonScene extends Phaser.Scene {
 	createMusic() {
 		this.music = this.sound.add("dungeon", {
 			loop: true,
-			volume: this.game.dungeonSceneData.musicVolume,
+			volume: this.game.settings.musicVolume,
 		});
 		this.music.play();
 	}
@@ -175,6 +176,7 @@ export default class DungeonScene extends Phaser.Scene {
 
 	gameOver(message: string) {
 		if (this.isGameOver) return;
+		this.game.data.coins += this.player.coins
 		this.isGameOver = true;
 		const duration = 3000;
 		const tween = this.tweens.add({

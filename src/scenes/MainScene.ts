@@ -16,7 +16,7 @@ export default class MainScene extends Phaser.Scene {
 
 		const music = this.sound.add("main", {
 			loop: true,
-			volume: this.game.dungeonSceneData.musicVolume,
+			volume: this.game.settings.musicVolume,
 		});
 
 		music.play();
