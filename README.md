@@ -2,7 +2,7 @@
 
 A game for my computer science class. I went a bit overboard. Made with Phaser 3 along with sweet Typescript.
 
-You can play the game [here](https://jeudi.weis.studio).
+You can play the game [here](https://weisrc.github.io/jeudi).
 
 ## Game
 
